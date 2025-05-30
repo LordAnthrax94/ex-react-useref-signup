@@ -6,12 +6,19 @@ function App() {
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
   
-  const [name, setName] = useState('')
+  
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [spec, setSpec] = useState('')
-  const [years, setYears] = useState('')
   const [description, setDescription] = useState('')
+
+  // const [name, setName] = useState('')
+  // const [spec, setSpec] = useState('')
+  // const [years, setYears] = useState('')
+
+  const nameRef = useRef();
+  const specRef = useRef();
+  const yearsRef = useRef();
+  
 
   const validUsername = useMemo(() => {
    const charsValid = username.split("").every(char =>
@@ -31,6 +38,11 @@ function App() {
   }, [description]);
 
   const handlerSubmit = (e) => {
+
+    const name = nameRef.current.value;
+    const spec = specRef.current.value;
+    const years = yearsRef.current.value;
+    
     e.preventDefault()
     if (
       !name.trim() || 
@@ -62,8 +74,7 @@ function App() {
               <p>Nome Completo</p>
                 <input 
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  ref={nameRef}
                   placeholder="Inserisci nome completo"
                 />
             </label>
@@ -98,8 +109,7 @@ function App() {
             <label>
                 <p>Seleziona Specializzazione</p>
                   <select              
-                    value={spec}
-                    onChange={(e) => setSpec(e.target.value)} 
+                    ref={specRef} 
                   >
                     <option value="">-- Seleziona --</option>
                     <option value="frontend">Frontend</option>
@@ -111,8 +121,7 @@ function App() {
               <p>Inserisci Anni di Esperienza</p>
                 <input 
                   type="number"
-                  value={years}
-                  onChange={(e) => setYears(e.target.value)}
+                  ref={yearsRef}
                   placeholder='Inserisci anni di esperienza'
                 />
             </label>

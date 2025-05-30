@@ -1,6 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 
 function App() {
+
+  const letters = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
   
   const [name, setName] = useState('')
   const [username, setUserName] = useState('')
@@ -8,6 +12,23 @@ function App() {
   const [spec, setSpec] = useState('')
   const [years, setYears] = useState('')
   const [description, setDescription] = useState('')
+
+  const validUsername = useMemo(() => {
+   const charsValid = username.split("").every(char =>
+      letters.includes(char.toLowerCase()) || numbers.includes(char)
+    );
+    return charsValid && username.length >= 6;
+  }, [username]);
+
+  const validPassword = useMemo(() => {    
+    return (password.length >= 8 && password.split("").some(char => letters.includes(char.toLowerCase())) &&
+      password.split("").some(char => numbers.includes(char)) &&
+      password.split("").some(char => symbols.includes(char)));
+  }, [password]);
+
+  const validDescription = useMemo(() => {
+    return description.trim().length >= 100 && description.trim().length <= 1000;
+  }, [description]);
 
   const handlerSubmit = (e) => {
     e.preventDefault()
@@ -54,6 +75,11 @@ function App() {
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder='Inserisci un username'
                 />
+                {username.trim() && (
+                  <p style={{ color: validUsername ? 'green' : 'red' }}>
+                    {validUsername ? 'Username valido' : 'Username non valido. Deve contenere almeno 6 caratteri e solo lettere o numeri.'}
+                  </p>
+                )}
             </label>
             <label>
               <p>Scegli una password</p>
@@ -63,6 +89,11 @@ function App() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='Inserire password' 
                 />
+                {password.trim() && (
+                  <p style={{ color: validPassword ? 'green' : 'red' }}>
+                    {validPassword ? 'Password valida' : 'Password non valida. Deve contenere almeno 8 caratteri, una lettera, un numero e un simbolo.'}
+                  </p>
+                )}
             </label>
             <label>
                 <p>Seleziona Specializzazione</p>
@@ -91,6 +122,11 @@ function App() {
                   value={description} 
                   onChange={e => setDescription(e.target.value)} 
                 /> 
+                {description.trim() && (
+                  <p style={{ color: validDescription ? 'green' : 'red' }}>
+                    {validDescription ? 'Descrizione valida' : 'Descrizione non valida. Deve contenere tra 100 e 1000 caratteri.'}
+                  </p>
+                )}
             </label> 
           <button type='Submit'>Invia Registrazione</button>
         </form>

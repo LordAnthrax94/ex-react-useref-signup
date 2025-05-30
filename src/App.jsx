@@ -11,11 +11,27 @@ function App() {
 
   const handlerSubmit = (e) => {
     e.preventDefault()
+    if (
+      !name.trim() || 
+      !username.trim() || 
+      !password.trim() || 
+      !spec.trim() ||
+      !years.trim() || 
+      years <= 0 || 
+      !description.trim()
+    ) {
+      alert('Per favore, compila tutti i campi.')
+      return;
+    }
+    console.log("Dati inviati:", {
+      name,
+      username,
+      password,
+      spec,
+      years,
+      description
+    });    
   }
-
-  const validationForm = 
-    
-  
 
   return (
     <div>
@@ -75,9 +91,8 @@ function App() {
                   value={description} 
                   onChange={e => setDescription(e.target.value)} 
                 /> 
-            </label>           
-
-          
+            </label> 
+          <button type='Submit'>Invia Registrazione</button>
         </form>
         
       
